@@ -44,7 +44,6 @@ router.post("/signup", async (req, res) => {
   }
 
   const user = await Users.findOne({ where: { nickname } }).catch((err) => {
-    console.error(err);
     throw errorWithStatusCode(400, "회원가입에 실패했습니다.");
   });
 
@@ -57,7 +56,6 @@ router.post("/signup", async (req, res) => {
     nickname,
     password,
   }).catch((err) => {
-    console.error(err);
     throw errorWithStatusCode(400, "회원가입에 실패했습니다.");
   });
 
@@ -85,7 +83,6 @@ router.post("/login", async (req, res) => {
 
   const user = await Users.findOne({ where: { nickname, password } }).catch(
     (err) => {
-      console.error(err);
       throw errorWithStatusCode(400, "로그인에 실패했습니다.");
     }
   );

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "userId",
         foreignKey: "userId",
       });
+
       this.hasMany(models.Comments, {
         sourceKey: "postId",
         foreignKey: "postId",
@@ -43,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       content: {
         allowNull: false,
         type: DataTypes.STRING,
+      },
+      likes: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
