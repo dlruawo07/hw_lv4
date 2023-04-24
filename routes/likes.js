@@ -60,25 +60,19 @@ router.get("/like", authMiddleware, async (req, res) => {
 
   const { userId } = res.locals.user;
 
-  // 여기서 includes model/attributes를 해주고 싶은데 그렇게 하면 객체가 따로 생김
-
-  // 기대값
+  // 원하는 출력값
   // postId: 2
   // Posts.attr1
   // Posts.attr2
   // Posts.attr3
 
-  // 실제 출력값
+  // 현재 출력값
   // postId: 2
   // Posts: {
   //   attr1
   //   attr2
   //   attr3
   // }
-
-  // 하고 싶은거
-  // 1. Likes 테이블에서 userId가 userId인 값들만 추출.
-  // 2. 추출된 데이터에서의 postId의 전체 정보를 Posts 테이블에서 조회.
   const likes = await Likes.findAll({ where: { userId } }).catch((err) => {
     throw errorWithStatusCode(400, "게시글 조회에 실패했습니다.");
   });
@@ -87,20 +81,34 @@ router.get("/like", authMiddleware, async (req, res) => {
     throw errorWithStatusCode(404, "게시글이 존재하지 않습니다.");
   }
 
-  const posts = await Likes.findAll({
+  const targetPosts = await Likes.findAll({
     attributes: ["postId"],
     include: [
       {
         model: Posts,
         required: true,
-        // through: { where: { userId } },
-        attributes: { exclude: ["postId", "content"] },
+        attributes: { exclude: ["content"] },
       },
     ],
     where: { userId },
   });
 
-  return res.status(200).json({ posts });
+  // 다른 방법이 있지 않을까?
+  // const posts = targetPosts.map((post) => {
+  //   return {
+  //     postId: post.postId,
+  //     userId: post.Post.userId,
+  //     nickname: post.Post.nickname,
+  //     title: post.Post.title,
+  //     likes: post.Post.likes,
+  //     createdAt: post.Post.createdAt,
+  //     updatedAt: post.Post.updatedAt,
+  //   };
+  // });
+
+  // return res.status(200).json({ posts });
+
+  return res.status(200).json({ targetPosts });
 });
 
 module.exports = router;
