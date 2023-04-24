@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "!Q2w3e4r",
-    "database": "hw_lv3",
+    "database": "hw_lv4",
     "host": "sparta.cvsxxg5ythbz.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },

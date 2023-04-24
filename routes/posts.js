@@ -20,10 +20,13 @@ router.get("/posts", async (req, res) => {
       "updatedAt",
     ],
     order: [["createdAt", "DESC"]],
+  }).catch((err) => {
+    console.error(err);
+    throw errorWithStatusCode(400, "게시글 조회에 실패했습니다.");
   });
 
   if (!posts.length) {
-    throw errorWithStatusCode("게시글이 존재하지 않습니다.", 404);
+    throw errorWithStatusCode(404, "게시글이 존재하지 않습니다.");
   }
 
   res.status(200).json({ posts });
@@ -42,17 +45,17 @@ router.post("/posts", authMiddleware, async (req, res) => {
     title === undefined ||
     content === undefined
   ) {
-    throw errorWithStatusCode("데이터 형식이 올바르지 않습니다.", 412);
+    throw errorWithStatusCode(412, "데이터 형식이 올바르지 않습니다.");
   }
 
   // title의 형식이 비정상적인 경우
   if (title === "" || typeof title !== "string") {
-    throw errorWithStatusCode("게시글 제목의 형식이 일치하지 않습니다.", 412);
+    throw errorWithStatusCode(412, "게시글 제목의 형식이 일치하지 않습니다.");
   }
 
   // content의 형식이 비정상적인 경우
   if (content === "" || typeof content !== "string") {
-    throw errorWithStatusCode("게시글 내용의 형식이 일치하지 않습니다.", 412);
+    throw errorWithStatusCode(412, "게시글 내용의 형식이 일치하지 않습니다.");
   }
 
   await Posts.create({
@@ -62,7 +65,7 @@ router.post("/posts", authMiddleware, async (req, res) => {
     content,
   }).catch((err) => {
     console.error(err);
-    throw errorWithStatusCode("게시글 작성에 실패했습니다.", 400);
+    throw errorWithStatusCode(400, "게시글 작성에 실패했습니다.");
   });
 
   res.status(201).json({ message: "게시글 작성에 성공했습니다." });
@@ -87,11 +90,11 @@ router.get("/posts/:postId", async (req, res) => {
     order: [["createdAt", "DESC"]],
   }).catch((err) => {
     console.error(err);
-    throw errorWithStatusCode("게시글 조회에 실패했습니다.", 400);
+    throw errorWithStatusCode(400, "게시글 조회에 실패했습니다.");
   });
 
   if (!post) {
-    throw errorWithStatusCode("게시글 조회에 실패했습니다.", 400);
+    throw errorWithStatusCode(400, "게시글 조회에 실패했습니다.");
   }
 
   res.status(200).json({ post });
@@ -106,34 +109,34 @@ router.put("/posts/:postId", authMiddleware, async (req, res) => {
 
   const post = await Posts.findOne({ where: { postId } }).catch((err) => {
     console.error(err);
-    throw errorWithStatusCode("게시글 수정에 실패했습니다.", 400);
+    throw errorWithStatusCode(400, "게시글 수정에 실패했습니다.");
   });
 
   // 수정하고자 하는 게시글이 존재하지 않는 경우
   if (!post) {
-    throw errorWithStatusCode("게시글이 존재하지 않습니다.", 404);
+    throw errorWithStatusCode(404, "게시글이 존재하지 않습니다.");
   }
 
   // 게시글들 수정할 권한이 존재하지 않는 경우
   if (userId !== post.userId) {
-    throw errorWithStatusCode("게시글의 수정 권한이 존재하지 않습니다.", 403);
+    throw errorWithStatusCode(403, "게시글의 수정 권한이 존재하지 않습니다.");
   }
 
   const { title, content } = req.body;
 
   // body 데이터가 정상적으로 전달되지 않는 경우
   if (Object.keys(req.body).length !== 2) {
-    throw errorWithStatusCode("데이터 형식이 올바르지 않습니다.", 412);
+    throw errorWithStatusCode(412, "데이터 형식이 올바르지 않습니다.");
   }
 
   // title의 형식이 비정상적인 경우
   if (title === undefined || title === "" || typeof title !== "string") {
-    throw errorWithStatusCode("게시글 제목의 형식이 일치하지 않습니다.", 412);
+    throw errorWithStatusCode(412, "게시글 제목의 형식이 일치하지 않습니다.");
   }
 
   // content의 형식이 비정상적인 경우
   if (content === undefined || content === "" || typeof content !== "string") {
-    throw errorWithStatusCode("게시글 내용의 형식이 일치하지 않습니다.", 412);
+    throw errorWithStatusCode(412, "게시글 내용의 형식이 일치하지 않습니다.");
   }
 
   // 게시글 수정이 실패한 경우
@@ -142,7 +145,7 @@ router.put("/posts/:postId", authMiddleware, async (req, res) => {
     { where: { postId } }
   ).catch((err) => {
     console.error(err);
-    throw errorWithStatusCode("게시글이 정상적으로 수정되지 않았습니다.", 401);
+    throw errorWithStatusCode(401, "게시글이 정상적으로 수정되지 않았습니다.");
   });
 
   res.status(200).json({ message: "게시글을 수정했습니다." });
@@ -156,23 +159,23 @@ router.delete("/posts/:postId", authMiddleware, async (req, res) => {
 
   const post = await Posts.findOne({ where: { postId } }).catch((err) => {
     console.error(err);
-    throw errorWithStatusCode("게시글이 삭제에 실패했습니다.", 400);
+    throw errorWithStatusCode(400, "게시글이 삭제에 실패했습니다.");
   });
 
   // 삭제하고자 하는 게시글이 존재하지 않는 경우
   if (!post) {
-    throw errorWithStatusCode("게시글이 존재하지 않습니다.", 404);
+    throw errorWithStatusCode(404, "게시글이 존재하지 않습니다.");
   }
 
   // 게시글을 삭제할 권한이 존재하지 않는 경우
   if (userId !== post.userId) {
-    throw errorWithStatusCode("게시글의 삭제 권한이 존재하지 않습니다.", 403);
+    throw errorWithStatusCode(403, "게시글의 삭제 권한이 존재하지 않습니다.");
   }
 
   // 게시글 삭제에 실패한 경우
   await Posts.destroy({ where: { postId } }).catch((err) => {
     console.error(err);
-    throw errorWithStatusCode("게시글이 정상적으로 삭제되지 않습니다.", 401);
+    throw errorWithStatusCode(401, "게시글이 정상적으로 삭제되지 않습니다.");
   });
 
   res.status(200).json({ message: "게시글을 삭제했습니다." });

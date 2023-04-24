@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 
   // Cookie가 존재하지 않을 경우
   if (authType !== "Bearer" || authToken === "") {
-    throw errorWithStatusCode("로그인이 필요한 기능입니다.", 403);
+    throw errorWithStatusCode(403, "로그인이 필요한 기능입니다.");
   }
 
   try {
@@ -29,6 +29,6 @@ module.exports = async (req, res, next) => {
   } catch (err) {
     console.error(err);
     // Cookie가 비정상적이거나 만료된 경우
-    throw errorWithStatusCode("전달된 쿠키에서 오류가 발생했습니다.", 403);
+    throw errorWithStatusCode(403, "전달된 쿠키에서 오류가 발생했습니다.");
   }
 };
