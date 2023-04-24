@@ -7,6 +7,7 @@ const { errorWithStatusCode } = require("../middlewares/errorHandler");
 
 // 회원가입 API
 router.post("/signup", async (req, res) => {
+  console.log("\u001b[1;34m POST /signup\u001b[0m");
   // req.body로 들어온 값이 3개가 아닌 경우
   if (Object.keys(req.body).length !== 3) {
     throw errorWithStatusCode(400, "요청한 데이터 형식이 올바르지 않습니다.");
@@ -64,6 +65,8 @@ router.post("/signup", async (req, res) => {
 
 // 로그인 API
 router.post("/login", async (req, res) => {
+  console.log("\u001b[1;34m POST /login\u001b[0m");
+
   // req.body로 들어온 값이 2개가 아닌 경우
   if (Object.keys(req.body).length !== 2) {
     throw errorWithStatusCode(400, "로그인에 실패했습니다.");

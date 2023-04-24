@@ -12,6 +12,8 @@ const { errorWithStatusCode } = require("../middlewares/errorHandler");
 //     - 조회하는 게시글에 작성된 모든 댓글을 목록 형식으로 볼 수 있도록 하기
 //     - 작성 날짜 기준으로 내림차순 정렬하기
 router.get("/:postId/comments", async (req, res) => {
+  console.log("\u001b[1;32m GET /:postId/comments\u001b[0m");
+
   const { postId } = req.params;
 
   const comments = await Comments.findAll({
@@ -36,6 +38,8 @@ router.get("/:postId/comments", async (req, res) => {
 //     - 댓글 내용을 비워둔 채 댓글 작성 API를 호출하면 "댓글 내용을 입력해주세요" 라는 메세지를 return하기
 //     - 댓글 내용을 입력하고 댓글 작성 API를 호출한 경우 작성한 댓글을 추가하기
 router.post("/:postId/comments", authMiddleware, async (req, res) => {
+  console.log("\u001b[1;34m POST /:postId/comments\u001b[0m");
+
   const { userId, nickname } = res.locals.user;
   const { postId } = req.params;
 
@@ -77,6 +81,8 @@ router.post("/:postId/comments", authMiddleware, async (req, res) => {
 //     - 댓글 내용을 비워둔 채 댓글 수정 API를 호출하면 "댓글 내용을 입력해주세요" 라는 메세지를 return하기
 //     - 댓글 내용을 입력하고 댓글 수정 API를 호출한 경우 작성한 댓글을 수정하기
 router.put("/:postId/comments/:commentId", authMiddleware, async (req, res) => {
+  console.log("\u001b[1;33m PUT /:postId/comments/:commentId\u001b[0m");
+
   const { userId } = res.locals.user;
   const { postId } = req.params;
 
@@ -139,6 +145,8 @@ router.delete(
   "/:postId/comments/:commentId",
   authMiddleware,
   async (req, res) => {
+    console.log("\u001b[1;31m DELETE /:postId/comments/:commentId\u001b[0m");
+
     const { userId } = res.locals.user;
     const { postId } = req.params;
 
