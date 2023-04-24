@@ -60,19 +60,6 @@ router.get("/like", authMiddleware, async (req, res) => {
 
   const { userId } = res.locals.user;
 
-  // 원하는 출력값
-  // postId: 2
-  // Posts.attr1
-  // Posts.attr2
-  // Posts.attr3
-
-  // 현재 출력값
-  // postId: 2
-  // Posts: {
-  //   attr1
-  //   attr2
-  //   attr3
-  // }
   const likes = await Likes.findAll({ where: { userId } }).catch((err) => {
     throw errorWithStatusCode(400, "게시글 조회에 실패했습니다.");
   });
@@ -94,21 +81,19 @@ router.get("/like", authMiddleware, async (req, res) => {
   });
 
   // 다른 방법이 있지 않을까?
-  // const posts = targetPosts.map((post) => {
-  //   return {
-  //     postId: post.postId,
-  //     userId: post.Post.userId,
-  //     nickname: post.Post.nickname,
-  //     title: post.Post.title,
-  //     likes: post.Post.likes,
-  //     createdAt: post.Post.createdAt,
-  //     updatedAt: post.Post.updatedAt,
-  //   };
-  // });
+  const posts = targetPosts.map((post) => {
+    return {
+      postId: post.postId,
+      userId: post.Post.userId,
+      nickname: post.Post.nickname,
+      title: post.Post.title,
+      likes: post.Post.likes,
+      createdAt: post.Post.createdAt,
+      updatedAt: post.Post.updatedAt,
+    };
+  });
 
-  // return res.status(200).json({ posts });
-
-  return res.status(200).json({ targetPosts });
+  return res.status(200).json({ posts });
 });
 
 module.exports = router;
