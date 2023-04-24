@@ -96,13 +96,32 @@ router.get("/like", authMiddleware, async (req, res) => {
 
   return res.status(200).json({ posts });
 
-  // // Likes의 postId가 Posts의 postId를 참조하기 때문에 join이 됨
+  // Likes의 postId가 Posts의 postId를 참조하기 때문에 join이 됨
   // const joinWithPosts = await Likes.findAll({
   //   attributes: ["postId"],
-  //   include: [{ model: Posts, attributes: { exclude: ["postId", "content"] } }],
+  //   include: [
+  //     {
+  //       model: Posts,
+  //       through: { attributes: ["postId"] },
+  //       // through: { attributes: { exclude: ["postId", "content"] } },
+  //     },
+  //   ],
   //   where: { userId },
   // });
-  // return res.status(200).json({ joinWithPosts });
+
+  //   const joinWithPosts = await Posts.findAll({
+  //     include: [
+  //       {
+  //         model: Likes,
+  //         through: {
+  //           where: {
+  //             userId,
+  //           },
+  //         },
+  //       },
+  //     ],
+  //   });
+  //   return res.status(200).json({ joinWithPosts });
 });
 
 module.exports = router;

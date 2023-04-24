@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const { Users } = require("../models");
 const { errorWithStatusCode } = require("./errorHandler");
+const errorHandler = require("./errorHandler");
 
 module.exports = async (req, res, next) => {
   const { Authorization } = req.cookies;
@@ -19,8 +20,10 @@ module.exports = async (req, res, next) => {
     // 2. authToken이 서버가 발급한 토큰이 맞는지
     const { userId } = jwt.verify(authToken, "customized-secret-key");
 
-    // 3. authToken에 있는 userId에 해당하는 사용자가 실제 DB에 있는지
     const user = await Users.findOne({ where: { userId } });
+
+    // 3. authToken에 있는 userId에 해당하는 사용자가 실제 DB에 있는지
+    if (!user) throw new Error();
 
     // 미들웨어 다음으로 데이터 전달
     res.locals.user = user;
