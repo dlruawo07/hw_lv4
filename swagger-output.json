@@ -7,9 +7,7 @@
   },
   "host": "3.37.87.110",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
     "/api/": {
       "get": {

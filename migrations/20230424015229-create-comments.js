@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Comments", {
+    await queryInterface.createTable('Comments', {
       commentId: {
         allowNull: false,
         autoIncrement: true,
@@ -13,10 +13,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
-          key: "userId",
+          model: 'Users',
+          key: 'userId',
         },
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
       },
       nickname: {
         allowNull: false,
@@ -26,10 +26,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Posts",
-          key: "postId",
+          model: 'Posts',
+          key: 'postId',
         },
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
       },
       comment: {
         allowNull: false,
@@ -46,16 +46,16 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now"),
+        defaultValue: Sequelize.fn('now'),
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Comments");
+    await queryInterface.dropTable('Comments');
   },
 };
